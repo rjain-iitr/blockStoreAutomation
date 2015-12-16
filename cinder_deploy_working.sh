@@ -42,7 +42,7 @@ sudo rabbitmqctl set_permissions $RABBIT_MQ_USER ".*" ".*" ".*"
 
 
 
-echo " run these commands in mysql controller
+echo " run these commands in mysql shell
 
 CREATE DATABASE $DATABASE_NAME;
 
@@ -143,4 +143,5 @@ sudo apt-get install qemu-utils -y
  sudo service cinder-api restart
  sudo service cinder-volume restart
 #7
+
 
