@@ -82,6 +82,7 @@ EOF
 sudo cp -f cloudarchive-kilo.list /etc/apt/sources.list.d/cloudarchive-kilo.list
 cat /etc/apt/sources.list.d/cloudarchive-kilo.list
 
+rm cloudarchive-kilo.list
 
 
  sudo apt-get update
