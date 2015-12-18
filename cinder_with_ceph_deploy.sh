@@ -1,6 +1,6 @@
 
 set -x
-source cinder_with_ceph.conf
+source cinder_deploy.conf
 echo "start"
 #<<1
 sudo cat > ceph.list <<EOF
@@ -12,7 +12,6 @@ cat /etc/apt/sources.list.d/ceph.list
 
 rm ceph.list
 wget -q -O- 'https://download.ceph.com/keys/release.asc' | sudo apt-key add -
-*/
 #1
 
 #<<2
@@ -30,6 +29,9 @@ rbd default format = 2
 
 [client.cinder]
 keyring = $CINDER_KEYRING_FILE_LOCATION
+
+[client.cinder-backup]
+keyring = $CINDER_BACKUP_KEYRING_FILE_LOCATION
 EOT
 
 #3
@@ -56,6 +58,16 @@ EOF
 
 
 sudo cat <<EOT >> $CINDER_FILE_LOCATION
+
+backup_driver = cinder.backup.drivers.ceph
+backup_ceph_conf = $CEPH_FILE_LOCATION
+backup_ceph_user = cinder-backup
+backup_ceph_chunk_size = 134217728
+backup_ceph_pool = $BACKUP_POOL
+backup_ceph_stripe_unit = 0
+backup_ceph_stripe_count = 0
+restore_discard_excess_bytes = true
+
 [ceph]
 volume_driver=cinder.volume.drivers.rbd.RBDDriver
 volume_backend_name=ceph
