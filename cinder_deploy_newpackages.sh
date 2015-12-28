@@ -21,7 +21,7 @@ RABBIT_MQ_USER=stackrabbit
 DATABASE_HOST=$CINDER_HOST
 ADMIN_USER=admin
 ADMIN_PASS=password
-$CINDER_PACKAGE_DIR=~/cinder-packages/
+CINDER_PACKAGE_DIR=~/cinder-packages/
 0
 
 set -x
@@ -29,12 +29,13 @@ source cinder_deploy.conf
 echo "start" 
 sudo apt-get update
 sudo apt-get install mariadb-server python-mysqldb -y
+echo "waiting for mariadb installation"
 sleep 60
 sudo cat $MYSQL_CONF_FILE |grep "bind-address"
 sudo sed -i 's@bind-address.*@bind-address = '"$CINDER_NODE_IP"'@g' $MYSQL_CONF_FILE
 sudo cat $MYSQL_CONF_FILE |grep "bind-address"
 sudo service mysql restart
-echo "add rabitMq"
+echo "adding rabitMq"
 sleep 10
 sudo apt-get install rabbitmq-server -y
 
@@ -69,11 +70,12 @@ GRANT ALL PRIVILEGES ON cinder.* TO '$ADMIN_USER'@'%' \
 
 
 "
+sleep 1 
 
  mysql -u root -p
 
-
-
+echo "Installing cinder new packages"
+sleep 3
 sudo apt-get install ubuntu-cloud-keyring
 sudo cat > cloudarchive-kilo.list <<EOF
 deb http://ubuntu-cloud.archive.canonical.com/ubuntu trusty-updates/kilo main
@@ -84,6 +86,9 @@ cat /etc/apt/sources.list.d/cloudarchive-kilo.list
 
 rm cloudarchive-kilo.list
 
+
+echo "*** installing dependancies"
+sleep 1
 
  sudo apt-get update
 
@@ -98,8 +103,8 @@ sudo apt-get install -y -f libdevmapper-event1.02.1 libreadline5  watershed pyth
 cd $CINDER_PACKAGE_DIR
 pwd
 
-
-
+echo "installing cinder packages"
+sleep 1
 sudo dpkg -i *.deb
 
 
@@ -157,6 +162,7 @@ sleep 5
 sudo service cinder-api stop
 sudo service cinder-scheduler stop
 sudo service cinder-volume stop
+sudo service cinder-backup stop
 sleep 3
 sudo /bin/sh -c "cinder-manage db sync" $DATABASE_NAME
 
@@ -166,8 +172,9 @@ sudo apt-get install qemu-utils -y
 
 
  sudo service cinder-scheduler restart
- sudo service cinder-api restart
  sudo service cinder-volume restart
+ sudo service cinder-backup restart
+ sudo service cinder-api restart
 #7
 
 echo "end"
