@@ -1,4 +1,4 @@
-
+set -x
 
 
 source cinder_deploy.conf

@@ -144,6 +144,7 @@ lock_path = /var/lock/cinder
 
 EOT
 
+sudo cat $CINDER_FILE_LOCATION
 
 sudo cat <<EOT >> $CINDER_API_FILE_LOCATION
 auth_host = $KEYSTONE_NODE
@@ -163,9 +164,10 @@ sudo service cinder-api stop
 sudo service cinder-scheduler stop
 sudo service cinder-volume stop
 sudo service cinder-backup stop
-sleep 3
 
+sleep 1
 echo "doing db sync"
+sleep 3
 sudo /bin/sh -c "cinder-manage db sync" $DATABASE_NAME
 
 sleep 10
