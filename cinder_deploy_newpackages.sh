@@ -164,6 +164,8 @@ sudo service cinder-scheduler stop
 sudo service cinder-volume stop
 sudo service cinder-backup stop
 sleep 3
+
+echo "doing db sync"
 sudo /bin/sh -c "cinder-manage db sync" $DATABASE_NAME
 
 sleep 10
