@@ -17,8 +17,9 @@ run ceph_shellfile.sh on ceph node
 
 sudo ./ceph_shellfile.sh
 
-6)run cinder_with_ceph_deploy.sh on cinder node
+6) run database.sh (most steps are not automated here)
+
+7)run cinder_with_ceph_deploy.sh on cinder node
 
 sudo ./cinder_with_ceph_deploy.sh
 
-7) Todo database automation
