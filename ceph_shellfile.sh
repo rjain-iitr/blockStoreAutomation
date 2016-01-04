@@ -17,9 +17,11 @@ sudo cat $CEPH_FILE_LOCATION |ssh $CINDER_CONTROLLER_NODE sudo  tee $CEPH_FILE_L
 echo "copy keyring files"
 slwwp 2
 ceph auth get-or-create $CLIENT_CINDER | ssh $CINDER_CONTROLLER_NODE sudo tee $CINDER_KEYRING_FILE_LOCATION
-ceph auth get-or-create $CLIENT_CINDER | ssh $CINDER_CONTROLLER_NODE sudo tee  $CINDER_BACKUP_KEYRING_FILE_LOCATION
+ceph auth get-or-create $CLIENT_BACKUP | ssh $CINDER_CONTROLLER_NODE sudo tee  $CINDER_BACKUP_KEYRING_FILE_LOCATION
+ceph auth get-or-create $CLIENT_ADMIN | ssh $CINDER_CONTROLLER_NODE sudo tee  $ADMIN_KEYRING_FILE_LOCATION
 
 ssh $CINDER_CONTROLLER_NODE sudo useradd cinder
 ssh $CINDER_CONTROLLER_NODE sudo chown cinder:cinder $CINDER_BACKUP_KEYRING_FILE_LOCATION
 ssh $CINDER_CONTROLLER_NODE sudo chown cinder:cinder $CINDER_KEYRING_FILE_LOCATION
+ssh $CINDER_CONTROLLER_NODE sudo chown cinder:cinder $ADMIN_KEYRING_FILE_LOCATION
 ech0 "end"
