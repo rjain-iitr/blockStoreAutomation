@@ -26,12 +26,11 @@ CINDER_PACKAGE_DIR=~/cinder-packages/
 
 set -x
 source cinder_deploy.conf
-<<top
 echo "start" 
 sudo apt-get update
 sudo apt-get install mariadb-server python-mysqldb -y
 echo "waiting for mariadb installation"
-sleep 60
+sleep 30
 sudo cat $MYSQL_CONF_FILE |grep "bind-address"
 sudo sed -i 's@bind-address.*@bind-address = '"$CINDER_NODE_IP"'@g' $MYSQL_CONF_FILE
 sudo cat $MYSQL_CONF_FILE |grep "bind-address"
@@ -107,9 +106,7 @@ pwd
 echo "installing cinder packages"
 sleep 1
 sudo dpkg -i *.deb
-top
 
-CINDER_FILE_LOCATION=cinder.conf
 
 cat <<EOT >> $CINDER_FILE_LOCATION
 rpc_backend = rabbit
@@ -148,7 +145,7 @@ EOT
 
 cat $CINDER_FILE_LOCATION
 sleep 5
-CINDER_API_FILE_LOCATION=api-paste.ini
+echo "changing cinder"
 sleep 1
 cat <<EOT >> $CINDER_API_FILE_LOCATION
 auth_host = $KEYSTONE_NODE
@@ -160,13 +157,12 @@ admin_password = $ADMIN_PASS
 auth_tenant_name = service
 EOT
 
-cat $CINDER_API_FILE_LOCATION
 
 #<<7
 echo "restarting services"
 
 sleep 10
-sleep 40
+sleep 30
 sudo service cinder-api stop
 sudo service cinder-scheduler stop
 sudo service cinder-volume stop
